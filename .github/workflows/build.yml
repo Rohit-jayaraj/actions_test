@@ -1,0 +1,37 @@
+name: .NET Build and Test Pipeline
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    # We use windows-latest or ubuntu-latest depending on your target. 
+    # Ubuntu is typically faster and cheaper for modern .NET (Core/5/6/7/8+).
+    runs-on: self-hosted
+
+    steps:
+    # Step 1: Pull the source code into the runner
+    - name: Checkout Repository
+      uses: actions/checkout@v4
+
+    # Step 2: Set up the .NET Core SDK environment on the runner
+    - name: Setup .NET SDK
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: '8.0.x' # Change this to match your target framework (e.g., 6.0.x, 8.0.x)
+
+    # Step 3: Install dependencies (Nuget packages)
+    # This automatically finds your .slnx or .csproj files
+    - name: Restore Dependencies
+      run: dotnet restore
+
+    # Step 4: Compile the application in Release mode without re-restoring
+    - name: Build Solution
+      run: dotnet build --configuration Release --no-restore
+
+    # Step 5: Run your Unit Test suite (git_actions_test.Tests)
+    - name: Run Tests
+      run: dotnet test --configuration Release --no-build --verbosity normal
