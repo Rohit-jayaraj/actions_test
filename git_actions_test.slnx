@@ -1,0 +1,8 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/git_actions_test/git_actions_test.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/git_actions_test.Tests/git_actions_test.Tests.csproj" />
+  </Folder>
+</Solution>
